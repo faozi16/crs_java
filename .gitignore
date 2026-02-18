@@ -1,0 +1,86 @@
+# Gradle
+.gradle/
+build/
+dist/
+.gradle
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+.classpath
+.project
+.settings/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+
+# Gradle wrapper
+gradle-wrapper.jar
+.gradletasknamecache
+
+# Compiled class files
+*.class
+
+# Java
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Dynamic libraries
+*.so
+*.dll
+*.dylib
+
+# Kotlin
+*.kotlin_module
+
+# Temporary files
+*.tmp
+*.bak
+*.log
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Database
+*.db
+*.sqlite
+
+# Docker
+.dockerignore
+
+# OS
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Node (if used for frontend)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Misc
+.cache/
+.m2/
