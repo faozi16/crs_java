@@ -761,7 +761,7 @@ git push origin main                # Push to remote
 ---
 
 **Project**: Car Reservation System  
-**Repository**: /home/faozi/workspace/car_reservation_system  
+**Repository**: /home/theuser/workspace/car_reservation_system  
 **Last Updated**: February 18, 2026  
 **Version**: 0.0.1-SNAPSHOT
 

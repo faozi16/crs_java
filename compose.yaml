@@ -6,15 +6,15 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: verysecret
       MYSQL_DATABASE: car_rsvt
-      MYSQL_USER: faozi
-      MYSQL_PASSWORD: password
+      MYSQL_USER: theuser
+      MYSQL_PASSWORD: thepassword
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "faozi", "-ppassword"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "theuser", "-pthepassword"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -32,8 +32,8 @@ services:
         condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/car_rsvt
-      SPRING_DATASOURCE_USERNAME: faozi
-      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_DATASOURCE_USERNAME: theuser
+      SPRING_DATASOURCE_PASSWORD: thepassword
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
       SPRING_JPA_SHOW_SQL: "true"
       SPRING_JPA_HIBERNATE_DDL_AUTO: update

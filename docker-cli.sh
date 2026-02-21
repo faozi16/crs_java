@@ -66,7 +66,7 @@ start_app() {
         echo "Access points:"
         echo "  API: http://localhost:8080"
         echo "  API Health: http://localhost:8080/actuator/health"
-        echo "  Database: localhost:3306 (faozi/password)"
+        echo "  Database: localhost:3306 (theuser/password)"
     else
         print_warning "Application is starting, but not yet ready. Check logs with option 4"
     fi
@@ -117,7 +117,7 @@ check_status() {
 # Function to open database shell
 open_db_shell() {
     print_info "Opening MySQL shell..."
-    docker compose exec mysql mysql -u faozi -ppassword car_rsvt
+    docker compose exec mysql mysql -u theuser -pthepassword car_rsvt
 }
 
 # Function to open app shell
