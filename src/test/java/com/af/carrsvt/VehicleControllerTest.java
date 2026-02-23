@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Objects;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -72,8 +74,8 @@ class VehicleControllerTest {
         when(vehicleMapper.vehicleToVehicleDto(savedEntity)).thenReturn(responseDto);
 
         mockMvc.perform(post("/api/vehicles/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto))))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.vehicleId").value(1L));
     }
@@ -98,8 +100,8 @@ class VehicleControllerTest {
         when(vehicleMapper.vehicleToVehicleDto(updatedEntity)).thenReturn(responseDto);
 
         mockMvc.perform(put("/api/vehicles/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto))))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.vehicleId").value(1L));
     }
@@ -120,8 +122,8 @@ class VehicleControllerTest {
         requestDto.setLicensePlate("");
 
         mockMvc.perform(post("/api/vehicles/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto))))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.status").value(400));
     }
@@ -139,8 +141,8 @@ class VehicleControllerTest {
         when(vehicleService.updateVehicle(999L, entity)).thenThrow(new EntityNotFoundException("Vehicle not found"));
 
         mockMvc.perform(put("/api/vehicles/999")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto))))
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.status").value(404));
     }

@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -74,8 +75,8 @@ class PaymentControllerTest {
         when(paymentMapper.paymentToPaymentDto(savedEntity)).thenReturn(responseDto);
 
         mockMvc.perform(post("/api/payments/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto))))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.paymentId").value(1L));
     }
@@ -100,8 +101,8 @@ class PaymentControllerTest {
         when(paymentMapper.paymentToPaymentDto(updatedEntity)).thenReturn(responseDto);
 
         mockMvc.perform(put("/api/payments/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto))))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.paymentId").value(1L));
     }
@@ -122,8 +123,8 @@ class PaymentControllerTest {
         requestDto.setPaymentMethod(null);
 
         mockMvc.perform(post("/api/payments/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto))))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.status").value(400));
     }
@@ -141,8 +142,8 @@ class PaymentControllerTest {
         when(paymentService.updatePayment(999L, entity)).thenThrow(new EntityNotFoundException("Payment not found"));
 
         mockMvc.perform(put("/api/payments/999")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto))))
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.status").value(404));
     }

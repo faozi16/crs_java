@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import java.util.Objects;
 import org.springframework.http.MediaType;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -77,8 +78,8 @@ public class CustomerControllerTest {
         when(customerMapper.customerToCustomerDto(savedEntity)).thenReturn(responseDto);
 
         mockMvc.perform(post("/api/customers/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto))))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.customerId").value(1L))
                 .andExpect(jsonPath("$.firstName").value("John"))
@@ -111,8 +112,8 @@ public class CustomerControllerTest {
         when(customerMapper.customerToCustomerDto(updatedEntity)).thenReturn(responseDto);
 
         mockMvc.perform(put("/api/customers/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto))))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.customerId").value(1L))
                 .andExpect(jsonPath("$.firstName").value("John"))
@@ -138,8 +139,8 @@ public class CustomerControllerTest {
         requestDto.setEmail("invalid-email");
 
         mockMvc.perform(post("/api/customers/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto))))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.status").value(400));
     }
@@ -159,8 +160,8 @@ public class CustomerControllerTest {
         when(customerService.updateCustomer(999L, entity)).thenThrow(new EntityNotFoundException("Customer not found"));
 
         mockMvc.perform(put("/api/customers/999")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto))))
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.status").value(404));
     }

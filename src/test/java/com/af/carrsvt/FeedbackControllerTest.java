@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Objects;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -73,8 +75,8 @@ class FeedbackControllerTest {
         when(feedbackMapper.feedbackToFeedbackDto(savedEntity)).thenReturn(responseDto);
 
         mockMvc.perform(post("/api/feedbacks")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto))))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.feedbackId").value(1L));
     }
@@ -100,8 +102,8 @@ class FeedbackControllerTest {
         when(feedbackMapper.feedbackToFeedbackDto(updatedEntity)).thenReturn(responseDto);
 
         mockMvc.perform(put("/api/feedbacks/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto))))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.feedbackId").value(1L));
     }
@@ -122,8 +124,8 @@ class FeedbackControllerTest {
         requestDto.setRating(6);
 
         mockMvc.perform(post("/api/feedbacks")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto))))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.status").value(400));
     }
@@ -142,8 +144,8 @@ class FeedbackControllerTest {
         when(feedbackService.updateFeedback(999L, entity)).thenThrow(new EntityNotFoundException("Feedback not found"));
 
         mockMvc.perform(put("/api/feedbacks/999")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto))))
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.status").value(404));
     }

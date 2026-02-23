@@ -10,6 +10,7 @@ public class ContainerConfiguration {
 
     @Bean
     @ServiceConnection
+    @SuppressWarnings("resource")
     public MySQLContainer<?> mysqlContainer() {
         return new MySQLContainer<>("mysql:8.0")
             .withDatabaseName("car_rsvt_test")

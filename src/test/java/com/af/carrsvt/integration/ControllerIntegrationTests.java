@@ -4,6 +4,8 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.Objects;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +42,7 @@ class ControllerIntegrationTests {
 
     @BeforeEach
     void setup() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(Objects.requireNonNull(context)).build();
         paymentMethodRepository.deleteAll();
         customerRepository.deleteAll();
     }
@@ -54,13 +56,15 @@ class ControllerIntegrationTests {
         dto.setPhoneNumber("555-1111");
         dto.setStatus("A");
 
+        String requestJson = Objects.requireNonNull(objectMapper.writeValueAsString(dto));
+
         mockMvc.perform(post("/api/customers/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(dto)))
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                .content(requestJson))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.username", equalTo("apiuser")))
-            .andExpect(jsonPath("$.email", equalTo("apiuser@test.com")))
-            .andExpect(jsonPath("$.customerId", notNullValue()));
+            .andExpect(jsonPath("$.username", Objects.requireNonNull(equalTo("apiuser"))))
+            .andExpect(jsonPath("$.email", Objects.requireNonNull(equalTo("apiuser@test.com"))))
+            .andExpect(jsonPath("$.customerId", Objects.requireNonNull(notNullValue())));
     }
 
     @Test
@@ -72,11 +76,13 @@ class ControllerIntegrationTests {
         // email invalid
         dto.setEmail("not-an-email");
 
+        String requestJson = Objects.requireNonNull(objectMapper.writeValueAsString(dto));
+
         mockMvc.perform(post("/api/customers/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(dto)))
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                .content(requestJson))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errors", notNullValue()));
+            .andExpect(jsonPath("$.errors", Objects.requireNonNull(notNullValue())));
     }
 
     @Test
@@ -89,9 +95,11 @@ class ControllerIntegrationTests {
         dto.setPhoneNumber("555-2222");
         dto.setStatus("A");
 
+        String requestJson = Objects.requireNonNull(objectMapper.writeValueAsString(dto));
+
         String response = mockMvc.perform(post("/api/customers/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(dto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(requestJson))
             .andExpect(status().isOk())
             .andReturn().getResponse().getContentAsString();
 
@@ -101,8 +109,8 @@ class ControllerIntegrationTests {
         // Now retrieve it
         mockMvc.perform(get("/api/customers/" + customerId))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.username", equalTo("queryuser")))
-            .andExpect(jsonPath("$.customerId", equalTo(customerId.intValue())));
+            .andExpect(jsonPath("$.username", Objects.requireNonNull(equalTo("queryuser"))))
+            .andExpect(jsonPath("$.customerId", Objects.requireNonNull(equalTo(customerId.intValue()))));
     }
 
     @Test
@@ -115,9 +123,11 @@ class ControllerIntegrationTests {
         custDto.setPhoneNumber("555-3333");
         custDto.setStatus("A");
 
+        String customerRequestJson = Objects.requireNonNull(objectMapper.writeValueAsString(custDto));
+
         String custResponse = mockMvc.perform(post("/api/customers/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(custDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(customerRequestJson))
             .andExpect(status().isOk())
             .andReturn().getResponse().getContentAsString();
 
@@ -131,12 +141,14 @@ class ControllerIntegrationTests {
         pmDto.setDetails("****4567");
         pmDto.setPrimaryMethod(true);
 
+        String paymentMethodRequestJson = Objects.requireNonNull(objectMapper.writeValueAsString(pmDto));
+
         mockMvc.perform(post("/api/payment-methods/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(pmDto)))
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                .content(paymentMethodRequestJson))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.methodType", equalTo("CARD")))
-            .andExpect(jsonPath("$.paymentMethodId", notNullValue()));
+            .andExpect(jsonPath("$.methodType", Objects.requireNonNull(equalTo("CARD"))))
+            .andExpect(jsonPath("$.paymentMethodId", Objects.requireNonNull(notNullValue())));
     }
 
     @Test
@@ -149,9 +161,11 @@ class ControllerIntegrationTests {
         custDto.setPhoneNumber("555-4444");
         custDto.setStatus("A");
 
+        String customerRequestJson = Objects.requireNonNull(objectMapper.writeValueAsString(custDto));
+
         String custResponse = mockMvc.perform(post("/api/customers/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(custDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(customerRequestJson))
             .andExpect(status().isOk())
             .andReturn().getResponse().getContentAsString();
 
@@ -165,23 +179,25 @@ class ControllerIntegrationTests {
         pmDto.setDetails("pmq@paypal.com");
         pmDto.setPrimaryMethod(false);
 
+        String paymentMethodRequestJson = Objects.requireNonNull(objectMapper.writeValueAsString(pmDto));
+
         mockMvc.perform(post("/api/payment-methods/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(pmDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(paymentMethodRequestJson))
             .andExpect(status().isOk());
 
         // Query by customer ID
         mockMvc.perform(get("/api/payment-methods/get?customerId=" + customerId))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$[0].methodType", equalTo("PAYPAL")))
-            .andExpect(jsonPath("$", hasSize(1)));
+            .andExpect(jsonPath("$[0].methodType", Objects.requireNonNull(equalTo("PAYPAL"))))
+            .andExpect(jsonPath("$", Objects.requireNonNull(hasSize(1))));
     }
 
     @Test
     void testEntityNotFoundError() throws Exception {
         mockMvc.perform(get("/api/customers/99999"))
             .andExpect(status().isNotFound())
-            .andExpect(jsonPath("$.error", equalTo("Not Found")))
-            .andExpect(jsonPath("$.message", containsString("Customer not found")));
+            .andExpect(jsonPath("$.error", Objects.requireNonNull(equalTo("Not Found"))))
+            .andExpect(jsonPath("$.message", Objects.requireNonNull(containsString("Customer not found"))));
     }
 }

@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Objects;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -74,8 +76,8 @@ class DriverControllerTest {
         when(driverMapper.driverToDriverDto(savedEntity)).thenReturn(responseDto);
 
         mockMvc.perform(post("/api/drivers/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto))))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.driverId").value(1L));
     }
@@ -101,8 +103,8 @@ class DriverControllerTest {
         when(driverMapper.driverToDriverDto(updatedEntity)).thenReturn(responseDto);
 
         mockMvc.perform(put("/api/drivers/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto))))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.driverId").value(1L))
             .andExpect(jsonPath("$.username").value("driver-updated"));
@@ -125,8 +127,8 @@ class DriverControllerTest {
         requestDto.setLicenseDriver("");
 
         mockMvc.perform(post("/api/drivers/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto))))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.status").value(400));
     }
@@ -145,8 +147,8 @@ class DriverControllerTest {
         when(driverService.updateDriver(999L, entity)).thenThrow(new EntityNotFoundException("Driver not found"));
 
         mockMvc.perform(put("/api/drivers/999")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto))))
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.status").value(404));
     }

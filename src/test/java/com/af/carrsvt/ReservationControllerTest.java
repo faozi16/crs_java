@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.OffsetDateTime;
+import java.util.Objects;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -75,9 +76,11 @@ class ReservationControllerTest {
         when(reservationService.saveReservation(entity)).thenReturn(savedEntity);
         when(reservationMapper.reservationToReservationDto(savedEntity)).thenReturn(responseDto);
 
+        String requestJson = Objects.requireNonNull(objectMapper.writeValueAsString(requestDto));
+
         mockMvc.perform(post("/api/reservations/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(requestJson))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.reservationId").value(1L));
     }
@@ -103,9 +106,11 @@ class ReservationControllerTest {
         when(reservationService.updateReservation(1L, entity)).thenReturn(updatedEntity);
         when(reservationMapper.reservationToReservationDto(updatedEntity)).thenReturn(responseDto);
 
+        String requestJson = Objects.requireNonNull(objectMapper.writeValueAsString(requestDto));
+
         mockMvc.perform(put("/api/reservations/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(requestJson))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.reservationId").value(1L));
     }
@@ -124,9 +129,11 @@ class ReservationControllerTest {
         requestDto.setPickupLocation("");
         requestDto.setDropoffLocation("");
 
+        String requestJson = Objects.requireNonNull(objectMapper.writeValueAsString(requestDto));
+
         mockMvc.perform(post("/api/reservations/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(requestJson))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.status").value(400));
     }
@@ -145,9 +152,11 @@ class ReservationControllerTest {
         when(reservationMapper.reservationDtoToReservation(any(ReservationDto.class))).thenReturn(entity);
         when(reservationService.updateReservation(999L, entity)).thenThrow(new EntityNotFoundException("Reservation not found"));
 
+        String requestJson = Objects.requireNonNull(objectMapper.writeValueAsString(requestDto));
+
         mockMvc.perform(put("/api/reservations/999")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto)))
+            .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+            .content(requestJson))
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.status").value(404));
     }

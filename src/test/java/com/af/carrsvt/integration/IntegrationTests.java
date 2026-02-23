@@ -12,9 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import com.af.carrsvt.entity.Customer;
 import com.af.carrsvt.entity.Driver;
@@ -28,14 +25,10 @@ import com.af.carrsvt.repository.VehicleRepository;
 import com.af.carrsvt.repository.ReservationRepository;
 import com.af.carrsvt.service.CustomerService;
 import com.af.carrsvt.service.PaymentMethodService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(ContainerConfiguration.class)
 class IntegrationTests {
-
-    @Autowired
-    private WebApplicationContext context;
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -58,16 +51,10 @@ class IntegrationTests {
     @Autowired
     private PaymentMethodService paymentMethodService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-    private MockMvc mockMvc;
 
     @BeforeEach
     void setup() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
         paymentMethodRepository.deleteAll();
         reservationRepository.deleteAll();
         vehicleRepository.deleteAll();
