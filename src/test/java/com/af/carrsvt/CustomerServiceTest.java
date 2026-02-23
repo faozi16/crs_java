@@ -27,12 +27,25 @@ public class CustomerServiceTest {
 
     @Test
     public void testSaveCustomer() {
-        Customer customer = new Customer(null,"abah","pitersholeh","abah@farafamily.com","","A","","","","");
+        Customer customer = new Customer();
+        customer.setFirstName("Abah");
+        customer.setLastName("Soleh");
+        customer.setUsername("abah");
+        customer.setPassword("pitersholeh");
+        customer.setEmail("abah@farafamily.com");
+        customer.setPhoneNumber("");
+        customer.setStatus("A");
+        customer.setPaymentMethod1("");
+        customer.setPaymentMethod2("");
+        customer.setDetailPaymentMethod1("");
+        customer.setDetailPaymentMethod2("");
 
         Mockito.when(customerRepository.save(Mockito.any(Customer.class))).thenReturn(customer);
 
         Customer savedCustomer = customerService.saveCustomer(customer);
         assertEquals("abah", savedCustomer.getUsername());
+        assertEquals("Abah", savedCustomer.getFirstName());
+        assertEquals("Soleh", savedCustomer.getLastName());
     }
 
     // Add more tests for other service methods

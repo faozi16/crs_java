@@ -233,6 +233,8 @@ USE car_rsvt;
 ```sql
 CREATE TABLE customer (
     customer_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(100),
+    last_name VARCHAR(100),
     username VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
@@ -335,7 +337,7 @@ CREATE TABLE feedback (
 - One-to-Many: reservation
 - One-to-Many: payment_method
 
-**Key Fields**: customer_id (PK), username, email, phone_number, status
+**Key Fields**: customer_id (PK), first_name, last_name, username, email, phone_number, status
 
 ### 2. Vehicle
 **File**: [src/main/java/com/af/carrsvt/entity/Vehicle.java](src/main/java/com/af/carrsvt/entity/Vehicle.java)

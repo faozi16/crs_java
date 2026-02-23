@@ -18,6 +18,8 @@ CREATE TABLE IF NOT EXISTS driver (
 -- Create customer table
 CREATE TABLE IF NOT EXISTS customer (
     customer_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(100),
+    last_name VARCHAR(100),
     username VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
@@ -94,10 +96,10 @@ CREATE TABLE IF NOT EXISTS feedback (
 
 
 -- Insert sample data
-INSERT INTO customer (username, password, email, phone_number, status) VALUES
-('john', 'doe', 'john.doe@example.com', '555-0101', 'A'),
-('jane', 'smith', 'jane.smith@example.com', '555-0102', 'A'),
-('alex', 'brown', 'alex.brown@example.com', '555-0103', 'A');
+INSERT INTO customer (first_name, last_name, username, password, email, phone_number, status) VALUES
+('John', 'Doe', 'john', '$2y$10$yFyiJ0J1j7L8QUCVhP4afOrL04CX07G923XInGumGuRt3JdAaKSXa', 'john.doe@example.com', '555-0101', 'A'),
+('Jane', 'Smith', 'jane', '$2y$10$QOiHdV30rxAUoVuY3wonj.rCEy934J5Sd4mEb/nxZnZUZY7RP.SpC', 'jane.smith@example.com', '555-0102', 'A'),
+('Alex', 'Brown', 'alex', '$2y$10$0.ZT73doyBvltHiNiutOAOSQ6RloGrj/vVEygpbKV6rLoTij37gu2', 'alex.brown@example.com', '555-0103', 'A');
 
 INSERT INTO driver (name, license_number, status, phone_number) VALUES
 ('Ahmed Hassan', 'DL123456', 'AVAILABLE', '555-1001'),

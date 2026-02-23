@@ -11,6 +11,9 @@ import lombok.Setter;
 public class CustomerDto {
     private Long customerId;
 
+    private String firstName;
+    private String lastName;
+
     @NotBlank
     private String username;
 

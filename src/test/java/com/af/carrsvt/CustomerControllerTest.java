@@ -55,6 +55,8 @@ public class CustomerControllerTest {
     @Test
     void createCustomer_shouldReturnSavedCustomer() throws Exception {
         CustomerDto requestDto = new CustomerDto();
+        requestDto.setFirstName("John");
+        requestDto.setLastName("Doe");
         requestDto.setUsername("john");
         requestDto.setPassword("secret1");
         requestDto.setEmail("john@example.com");
@@ -65,6 +67,8 @@ public class CustomerControllerTest {
 
         CustomerDto responseDto = new CustomerDto();
         responseDto.setCustomerId(1L);
+        responseDto.setFirstName("John");
+        responseDto.setLastName("Doe");
         responseDto.setUsername("john");
         responseDto.setEmail("john@example.com");
 
@@ -77,12 +81,16 @@ public class CustomerControllerTest {
                 .content(objectMapper.writeValueAsString(requestDto)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.customerId").value(1L))
+                .andExpect(jsonPath("$.firstName").value("John"))
+                .andExpect(jsonPath("$.lastName").value("Doe"))
             .andExpect(jsonPath("$.username").value("john"));
     }
 
     @Test
     void updateCustomer_shouldReturnUpdatedCustomer() throws Exception {
         CustomerDto requestDto = new CustomerDto();
+        requestDto.setFirstName("John");
+        requestDto.setLastName("Updated");
         requestDto.setUsername("john-updated");
         requestDto.setPassword("secret1");
         requestDto.setEmail("john.updated@example.com");
@@ -93,6 +101,8 @@ public class CustomerControllerTest {
 
         CustomerDto responseDto = new CustomerDto();
         responseDto.setCustomerId(1L);
+        responseDto.setFirstName("John");
+        responseDto.setLastName("Updated");
         responseDto.setUsername("john-updated");
         responseDto.setEmail("john.updated@example.com");
 
@@ -105,6 +115,8 @@ public class CustomerControllerTest {
                 .content(objectMapper.writeValueAsString(requestDto)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.customerId").value(1L))
+                .andExpect(jsonPath("$.firstName").value("John"))
+                .andExpect(jsonPath("$.lastName").value("Updated"))
             .andExpect(jsonPath("$.username").value("john-updated"));
     }
 
@@ -119,6 +131,8 @@ public class CustomerControllerTest {
     @Test
     void createCustomer_shouldReturnBadRequest_whenPayloadInvalid() throws Exception {
         CustomerDto requestDto = new CustomerDto();
+        requestDto.setFirstName("Invalid");
+        requestDto.setLastName("User");
         requestDto.setUsername("");
         requestDto.setPassword("123");
         requestDto.setEmail("invalid-email");
@@ -133,6 +147,8 @@ public class CustomerControllerTest {
     @Test
     void updateCustomer_shouldReturnNotFound_whenCustomerMissing() throws Exception {
         CustomerDto requestDto = new CustomerDto();
+        requestDto.setFirstName("John");
+        requestDto.setLastName("Updated");
         requestDto.setUsername("john-updated");
         requestDto.setPassword("secret1");
         requestDto.setEmail("john.updated@example.com");

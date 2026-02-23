@@ -36,6 +36,8 @@ public class CustomerService {
 
     public Customer updateCustomer(Long customerId, Customer customerDetails) {
         Customer customer = getCustomerById(customerId);
+        customer.setFirstName(customerDetails.getFirstName());
+        customer.setLastName(customerDetails.getLastName());
         customer.setUsername(customerDetails.getUsername());
         if (customerDetails.getPassword() != null && !customerDetails.getPassword().isBlank()) {
             customer.setPassword(passwordEncoder.encode(customerDetails.getPassword()));

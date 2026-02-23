@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -61,6 +61,8 @@ class IntegrationTests {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -75,7 +77,14 @@ class IntegrationTests {
 
     @Test
     void testCustomerCreationWithPasswordEncoding() {
-        Customer c = new Customer(null, "testuser", "password123", "test@example.com", "1234567890", "A", "", "", "", "");
+        Customer c = new Customer();
+        c.setFirstName("Test");
+        c.setLastName("User");
+        c.setUsername("testuser");
+        c.setPassword("password123");
+        c.setEmail("test@example.com");
+        c.setPhoneNumber("1234567890");
+        c.setStatus("A");
         Customer saved = customerService.saveCustomer(c);
 
         assertNotNull(saved.getCustomerId());
@@ -86,8 +95,15 @@ class IntegrationTests {
 
     @Test
     void testRetrieveCustomerById() {
-        Customer c = new Customer(null, "john", "password123", "john@example.com", "555-1234", "A", "", "", "", "");
-        Customer saved = customerService.saveCustomer(c);
+        Customer c = new Customer();
+        c.setFirstName("John");
+        c.setLastName("Doe");
+        c.setUsername("john");
+        c.setPassword(passwordEncoder.encode("password123"));
+        c.setEmail("john@example.com");
+        c.setPhoneNumber("555-1234");
+        c.setStatus("A");
+        Customer saved = customerRepository.save(c);
 
         Customer retrieved = customerService.getCustomerById(saved.getCustomerId());
         assertEquals(saved.getCustomerId(), retrieved.getCustomerId());
@@ -97,8 +113,15 @@ class IntegrationTests {
     @Test
     void testPaymentMethodCreation() {
         // Create customer first
-        Customer c = new Customer(null, "alice", "pass123", "alice@test.com", "555-9999", "A", "", "", "", "");
-        Customer savedCustomer = customerService.saveCustomer(c);
+        Customer c = new Customer();
+        c.setFirstName("Alice");
+        c.setLastName("Tester");
+        c.setUsername("alice");
+        c.setPassword(passwordEncoder.encode("pass123"));
+        c.setEmail("alice@test.com");
+        c.setPhoneNumber("555-9999");
+        c.setStatus("A");
+        Customer savedCustomer = customerRepository.save(c);
 
         // Create payment method
         PaymentMethod pm = new PaymentMethod();
@@ -116,8 +139,15 @@ class IntegrationTests {
 
     @Test
     void testRetrievePaymentMethodsByCustomer() {
-        Customer c = new Customer(null, "bob", "pass456", "bob@test.com", "555-8888", "A", "", "", "", "");
-        Customer savedCustomer = customerService.saveCustomer(c);
+        Customer c = new Customer();
+        c.setFirstName("Bob");
+        c.setLastName("Tester");
+        c.setUsername("bob");
+        c.setPassword(passwordEncoder.encode("pass456"));
+        c.setEmail("bob@test.com");
+        c.setPhoneNumber("555-8888");
+        c.setStatus("A");
+        Customer savedCustomer = customerRepository.save(c);
 
         // Add multiple payment methods
         PaymentMethod pm1 = new PaymentMethod(null, savedCustomer.getCustomerId(), "CARD", "****5678", true, OffsetDateTime.now(), null);
@@ -153,8 +183,15 @@ class IntegrationTests {
     @Test
     void testReservationWithOffsetDateTime() {
         // Create customer
-        Customer c = new Customer(null, "charlie", "pass789", "charlie@test.com", "555-7777", "A", "", "", "", "");
-        Customer savedCustomer = customerService.saveCustomer(c);
+        Customer c = new Customer();
+        c.setFirstName("Charlie");
+        c.setLastName("Tester");
+        c.setUsername("charlie");
+        c.setPassword(passwordEncoder.encode("pass789"));
+        c.setEmail("charlie@test.com");
+        c.setPhoneNumber("555-7777");
+        c.setStatus("A");
+        Customer savedCustomer = customerRepository.save(c);
 
         // Create vehicle
         Vehicle v = new Vehicle();
@@ -181,8 +218,15 @@ class IntegrationTests {
     @Test
     void testEndToEndReservationFlow() {
         // 1. Create customer
-        Customer cust = new Customer(null, "frank", "frankpass", "frank@test.com", "555-6666", "A", "", "", "", "");
-        Customer savedCust = customerService.saveCustomer(cust);
+        Customer cust = new Customer();
+        cust.setFirstName("Frank");
+        cust.setLastName("Tester");
+        cust.setUsername("frank");
+        cust.setPassword(passwordEncoder.encode("frankpass"));
+        cust.setEmail("frank@test.com");
+        cust.setPhoneNumber("555-6666");
+        cust.setStatus("A");
+        Customer savedCust = customerRepository.save(cust);
 
         // 2. Create vehicle
         Vehicle veh = new Vehicle();
